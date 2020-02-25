@@ -3,13 +3,22 @@
 namespace App\Model\DB;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Authenticatable
+class User extends Model implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
-    use Notifiable,SoftDeletes;
+    use Authenticatable, Authorizable, CanResetPassword,Notifiable,SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'Username','RoleID','Email'
+        'Username','RoleID','Email','Password'
     ];
 
     /**
@@ -26,7 +35,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'Password', 'remember_token'
+        'remember_token'
     ];
 
     /**

@@ -24,10 +24,10 @@ class UserRegisterPostRequest extends PostRequest
     public function rules()
     {
         return [
-            'NamaLengkap' => 'required|string|max:50',
-            'Username' => 'required|string|max:50',
-            'NIK' => 'required|string|max:16',
-            'NoTelp' => 'required|int|max:13',
+            'NamaLengkap' => 'required|string|max:50|unique:anggotas',
+            'Username' => 'required|string|max:50|unique:users',
+            'NIK' => 'required|int|digits:16|unique:anggotas',
+            'NoTelp' => 'required|string|max:13',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role_id' => 'required|int'
@@ -50,6 +50,12 @@ class UserRegisterPostRequest extends PostRequest
             'Username.alpha_num' => 'Username must only contain alphanumeric characters',
             'Username.between' => 'Username must be between 8 and 50 characters long',
             'Username.unique' => 'Username is already taken',
+
+            'NamaLengkap.required' => 'Nama Lengkap must not be empty',
+            'NamaLengkap.unique' => 'Nama Lengkap has already existed',
+
+            'NIK.required' => 'NIK must not be empty',
+            'NIK.unique' => 'NIK is already taken',
 
             'password.required' => 'Password must not be empty',
             'password.min' => 'Password must be at least 8 characters',

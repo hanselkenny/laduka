@@ -11,13 +11,22 @@ use App\Service\Contracts\IRoleService;
 use App\Service\Contracts\IAuthService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Collection;
 
 class RegisterController extends Controller
 {
-    /*
+
+    private $roleService;
+    private $authService;
+    /**
+     * Where to redirect users after registration.
+     *
+     * @var string
+     */
+        /*
     |--------------------------------------------------------------------------
     | Register Controller
     |--------------------------------------------------------------------------
@@ -27,15 +36,7 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
     use RegistersUsers;
-    private $roleService;
-    private $authService;
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -87,12 +88,11 @@ class RegisterController extends Controller
     public function register(UserRegisterPostRequest $request)
     {
         event(new Registered($user = $this->create($request->validatedIntoCollection())));
-
+        
         return $this->registered($request, $user)
                         ?: redirect($this->redirectPath());
     }
-
-    protected function create(collection $data)
+    protected function create(Collection $data)
     {
         return $this->authService->RegisterUser($data);
     }

@@ -6,7 +6,8 @@ use App\Service\Contracts\IAuthService;
 use App\Repository\Contracts\IUserRepository;
 use App\Repository\Contracts\IAnggotaRepository;
 use Illuminate\Support\Facades\Hash;
-
+use App\Model\DB\User;
+use App\Model\DB\Anggota;
 class AuthService implements IAuthService
 {
     private $authRepository;
@@ -19,24 +20,38 @@ class AuthService implements IAuthService
         $this->anggotaRepository=$anggotaRepository;
         $this->userRepository=$userRepository;
     }
+    public function GetUserByEmailOrUsername($field){
+        $user = $this->userRepository->FindByUsername($field);
+        if (!is_null($user))
+            return $user;
+
+        $user = $this->userRepository->FindByEmail($field);
+        if (!is_null($user))
+            return $user;
+
+        return null;
+    }
+
     public function RegisterUser($data)
     {
-        $user = [
+        $userData = [
             "Username" => $data['Username'],
-            "Password" => Hash::make($data['Password']),
+            "Password" => Hash::make($data['password']),
             "Email" => $data['email'],
             "RoleID" => $data['role_id']
         ];
+        $user=new User($userData);
         $resultUser=$this->userRepository->InsertUpdate($user);
         if($resultUser != null)
         {
-            $anggota = [
+            $anggotaData = [
                 "UserID" => $resultUser['id'],
                 "NamaLengkap" => $data['NamaLengkap'],
                 "NIK" => $data['NIK'],
                 "NoTelp" => $data['NoTelp']
             ];
-            $resultAnggota = $this->anggotaRepository->InserUpdate($anggota);
+            $anggota=new Anggota($anggotaData);
+            $resultAnggota = $this->anggotaRepository->InsertUpdate($anggota);
         }
         return $resultUser;
     }
