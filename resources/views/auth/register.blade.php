@@ -15,7 +15,7 @@
                             <label for="NamaLengkap" class="col-md-4 col-form-label text-md-right">{{ __('Nama Lengkap') }}</label>
 
                             <div class="col-md-6">
-                                <input id="NamaLengkap" type="text" class="form-control @error('NamaLengkap') is-invalid @enderror" name="NamaLengkap" value="{{ old('NamaLengkap') }}" required autocomplete="NamaLengkap" autofocus>
+                                <input id="NamaLengkap" type="text" class="form-control @error('NamaLengkap') is-invalid @enderror" name="NamaLengkap" value="{{ old('NamaLengkap') }}"  maxlength="50" required autocomplete="NamaLengkap" autofocus>
 
                                 @error('NamaLengkap')
                                     <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
                             <label for="Username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
 
                             <div class="col-md-6">
-                                <input id="Username" type="text" class="form-control @error('Username') is-invalid @enderror" name="Username" value="{{ old('Username') }}" required autocomplete="Username">
+                                <input id="Username" type="text" class="form-control @error('Username') is-invalid @enderror" name="Username" value="{{ old('Username') }}"  maxlength="50" required autocomplete="Username">
 
                                 @error('Username')
                                     <span class="invalid-feedback" role="alert">
@@ -43,7 +43,7 @@
                             <label for="NIK" class="col-md-4 col-form-label text-md-right">{{ __('NIK') }}</label>
 
                             <div class="col-md-6">
-                                <input id="NIK" type="text" class="form-control @error('NIK') is-invalid @enderror" name="NIK" value="{{ old('NIK') }}" required autocomplete="NIK" >
+                                <input id="NIK" type="text" class="form-control @error('NIK') is-invalid @enderror" name="NIK" value="{{ old('NIK') }}"  maxlength="16" required autocomplete="NIK" >
 
                                 @error('NIK')
                                     <span class="invalid-feedback" role="alert">
@@ -57,7 +57,7 @@
                             <label for="NoTelp" class="col-md-4 col-form-label text-md-right">{{ __('No Telepon') }}</label>
 
                             <div class="col-md-6">
-                                <input id="NoTelp" type="text" class="form-control @error('NoTelp') is-invalid @enderror" name="NoTelp" value="{{ old('NoTelp') }}" required autocomplete="NoTelp" >
+                                <input id="NoTelp" type="text" class="form-control @error('NoTelp') is-invalid @enderror" name="NoTelp" value="{{ old('NoTelp') }}" maxlength="13" required autocomplete="NoTelp" >
 
                                 @error('NoTelp')
                                     <span class="invalid-feedback" role="alert">
@@ -71,7 +71,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  maxlength="50" required autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">

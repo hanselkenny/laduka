@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     private $repositories = [
-        'RoleRepository'
+        'RoleRepository',
+        'AnggotaRepository',
+        'UserRepository'
     ];
 
     /**
@@ -22,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     private $services = [
-        'RoleService'
+        'RoleService',
+        'AuthService'
     ];
     
     /**

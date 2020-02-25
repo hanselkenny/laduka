@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Model\DB\User;
 use App\Model\DB\Role;
+use App\Model\Requests\Auth\UserRegisterPostRequest;
 use App\Service\Contracts\IRoleService;
+use App\Service\Contracts\IAuthService;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,6 +30,7 @@ class RegisterController extends Controller
 
     use RegistersUsers;
     private $roleService;
+    private $authService;
     /**
      * Where to redirect users after registration.
      *
@@ -39,9 +43,10 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct(IRoleService $roleService)
+    public function __construct(IRoleService $roleService,IAuthService $authService)
     {
         $this->roleService=$roleService;
+        $this->authService=$authService;
         $this->middleware('guest');
     }
 
@@ -60,30 +65,35 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'NamaLengkap' => ['required', 'string', 'max:50'],
-            'Username' => ['required', 'string', 'max:50'],
-            'NIK' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'int']
-        ]);
-    }
+    // protected function validator(array $data)
+    // {
+    //     return Validator::make($data, [
+    //         'NamaLengkap' => ['required', 'string', 'max:50'],
+    //         'Username' => ['required', 'string', 'max:50'],
+    //         'NIK' => ['required', 'string', 'max:16'],
+    //         'NoTelp' => ['required', 'int', 'max:13'],
+    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //         'role_id' => ['required', 'int']
+    //     ]);
+    // }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Handle a registration request for the application.
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param  \App\Model\Requests\Auth\UserRegisterPostRequest  $request
+     * @return \Illuminate\Http\Response
      */
-    protected function create(array $data)
+    public function register(UserRegisterPostRequest $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        event(new Registered($user = $this->create($request->validatedIntoCollection())));
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
+    }
+
+    protected function create(collection $data)
+    {
+        return $this->authService->RegisterUser($data);
     }
 }
