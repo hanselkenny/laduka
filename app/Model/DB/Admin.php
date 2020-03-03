@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class Admin extends Authenticatable
 {
     use Notifiable,SoftDeletes;
 
@@ -16,14 +16,14 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $guard = 'user';
+    protected $guard = 'admin';
 
-    protected $table = "users";
+    protected $table = "admins";
 
     protected $primaryKey = "id";
 
     protected $fillable = [
-        'Username', 'password', 'email'
+        'Username', 'password', 'email','RoleID',
     ];
 
     /**
@@ -34,4 +34,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function role(){
+        return $this()->belongsTo('App\Model\DB\Role','RoleID');
+    }
 }

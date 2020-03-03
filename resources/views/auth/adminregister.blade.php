@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">{{ __('Register Admin') }}</div>
 
                 <div class="card-body">
-                    <form method="post" action="/register">
+                    <form method="POST" action="/adminregister">
                         @csrf
 
                         <div class="form-group row">
@@ -40,12 +40,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="NIK" class="col-md-4 col-form-label text-md-right">{{ __('NIK') }}</label>
+                            <label for="NIK" class="col-md-4 col-form-label text-md-right">{{ __('Nomor Karyawan') }}</label>
 
                             <div class="col-md-6">
-                                <input id="NIK" type="text" class="form-control @error('NIK') is-invalid @enderror" name="NIK" value="{{ old('NIK') }}"  maxlength="16" required autocomplete="NIK" >
+                                <input id="NomorKaryawan" type="text" class="form-control @error('NomorKaryawan') is-invalid @enderror" name="NomorKaryawan" value="{{ old('NomorKaryawan') }}"  maxlength="16" required autocomplete="NomorKaryawan" >
 
-                                @error('NIK')
+                                @error('NomorKaryawan')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -81,13 +81,19 @@
                             </div>
                         </div>
 
-                        {{-- <div class="form-group row">
+                        <div class="form-group row">
                             <label for="list-roles" class="col-md-4 col-form-label text-md-right">{{ __('List Roles') }}</label>
 
                             <div class="col-md-6">
                                 {{ Form::select('role_id', $rolesList, null, ['class' => 'form-control', 'id' => 'roles_id']) }}
+                                @error('role_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                        </div> --}}
+                            
+                        </div>
 
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>

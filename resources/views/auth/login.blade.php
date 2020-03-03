@@ -62,6 +62,9 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
+                                <div class="row">
+                                    <span class="text-danger">{{ $error ?? '' }}</span>
+                                </div>
                             </div>
                         </div>
                     </form>

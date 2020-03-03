@@ -2,23 +2,29 @@
 
 namespace App\Service\Modules;
 
+use App\Model\DB\User;
+use App\Model\DB\Admin;
+use App\Model\DB\DetailUser;
+use App\Model\DB\DetailAdmin;
 use App\Service\Contracts\IAuthService;
 use App\Repository\Contracts\IUserRepository;
-use App\Repository\Contracts\IAnggotaRepository;
+use App\Repository\Contracts\IDetailUserRepository;
+use App\Repository\Contracts\IAdminRepository;
+use App\Repository\Contracts\IDetailAdminRepository;
 use Illuminate\Support\Facades\Hash;
-use App\Model\DB\User;
-use App\Model\DB\Anggota;
+
 class AuthService implements IAuthService
 {
-    private $authRepository;
-    private $anggotaRepository;
-    public function __construct(
-        IUserRepository $userRepository,
-        IAnggotaRepository $anggotaRepository
-    )
+    private $userRepository;
+    private $detailUserRepository;
+    private $adminRepository;
+    private $detailAdminRepository;
+    public function __construct(IUserRepository $userRepository,IAdminRepository $adminRepository,IDetailUserRepository $detailUserRepository,IDetailAdminRepository $detailAdminRepository)
     {
-        $this->anggotaRepository=$anggotaRepository;
+        $this->detailUserRepository=$detailUserRepository;
         $this->userRepository=$userRepository;
+        $this->detailAdminRepository = $detailAdminRepository;
+        $this->adminRepository = $adminRepository;
     }
     public function GetUserByEmailOrUsername($field){
         $user = $this->userRepository->FindByUsername($field);
@@ -36,23 +42,46 @@ class AuthService implements IAuthService
     {
         $userData = [
             "Username" => $data['Username'],
-            "Password" => Hash::make($data['password']),
-            "Email" => $data['email'],
-            "RoleID" => $data['role_id']
+            "password" => Hash::make($data['password']),
+            "email" => $data['email']
         ];
         $user=new User($userData);
         $resultUser=$this->userRepository->InsertUpdate($user);
         if($resultUser != null)
         {
-            $anggotaData = [
+            $detailUserData = [
                 "UserID" => $resultUser['id'],
                 "NamaLengkap" => $data['NamaLengkap'],
                 "NIK" => $data['NIK'],
                 "NoTelp" => $data['NoTelp']
             ];
-            $anggota=new Anggota($anggotaData);
-            $resultAnggota = $this->anggotaRepository->InsertUpdate($anggota);
+            $detail=new DetailUser($detailUserData);
+            $resultDetailUser = $this->detailUserRepository->InsertUpdate($detail);
         }
         return $resultUser;
+    }
+
+    public function RegisterAdmin($data)
+    {
+        $adminData = [
+            "Username" => $data['Username'],
+            "password" => Hash::make($data['password']),
+            "email" => $data['email'],
+            "RoleID" => $data['role_id']
+        ];
+        $admin=new Admin($adminData);
+        $resultAdmin=$this->adminRepository->InsertUpdate($admin);
+        if($resultAdmin != null)
+        {
+            $detailAdminData = [
+                "AdminID" => $resultAdmin['id'],
+                "NamaLengkap" => $data['NamaLengkap'],
+                "NomorKaryawan" => $data['NomorKaryawan'],
+                "NoTelp" => $data['NoTelp']
+            ];
+            $detail=new DetailAdmin($detailAdminData);
+            $resultDetailAdmin = $this->detailAdminRepository->InsertUpdate($detail);
+        }
+        return $resultAdmin;
     }
 }

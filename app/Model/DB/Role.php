@@ -10,6 +10,6 @@ class Role extends Model
     use SoftDeletes;
 
     public function user(){
-        return $this->hasMany('App\Model\DB\Users');
+        return $this->hasMany('App\Model\DB\Admin');
     }
 }

@@ -14,8 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     private $repositories = [
         'RoleRepository',
-        'AnggotaRepository',
-        'UserRepository'
+        'DetailUserRepository',
+        'UserRepository',
+        'AdminRepository',
+        'DetailAdminRepository'
     ];
 
     /**

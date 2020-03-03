@@ -4,7 +4,7 @@ namespace App\Model\Requests\Auth;
 
 use App\Model\Requests\PostRequest;
 
-class UserRegisterPostRequest extends PostRequest
+class AdminRegisterPostRequest extends PostRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,13 @@ class UserRegisterPostRequest extends PostRequest
     public function rules()
     {
         return [
-            'NamaLengkap' => 'required|string|max:50|unique:detail_users',
-            'Username' => 'required|string|max:50|unique:users',
-            'NIK' => 'required|int|digits:16|unique:detail_users',
+            'NamaLengkap' => 'required|string|max:50|unique:detail_admins',
+            'Username' => 'required|string|max:50|unique:admins',
+            'NomorKaryawan' => 'required|int|digits:16|unique:detail_admins',
             'NoTelp' => 'required|string|max:13',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|string|email|max:255|unique:admins',
+            'role_id' => 'required|int',
+            'password' => 'required|string|min:8|confirmed'
         ];
     }
 
@@ -53,8 +54,10 @@ class UserRegisterPostRequest extends PostRequest
             'NamaLengkap.required' => 'Nama Lengkap must not be empty',
             'NamaLengkap.unique' => 'Nama Lengkap has already existed',
 
-            'NIK.required' => 'Nama Lengkap must not be empty',
-            'NIK.unique' => 'Nama Lengkap has already existed',
+            'NomorKaryawan.required' => 'Nomor karyawan must not be empty',
+            'NomorKaryawan.unique' => 'Nomor karyawan has already existed',
+
+            'role_id.required' => 'Role must not be empty',
 
             'password.required' => 'Password must not be empty',
             'password.min' => 'Password must be at least 8 characters',
